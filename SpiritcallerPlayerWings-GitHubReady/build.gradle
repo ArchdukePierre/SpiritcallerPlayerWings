@@ -1,0 +1,79 @@
+
+plugins {
+    id 'java'
+    id 'eclipse'
+    id 'maven-publish'
+    id 'net.minecraftforge.gradle' version '[6.0,6.2)'
+}
+
+version = mod_version
+group = project.group
+base {
+    archivesName = archives_base_name
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(java_version as int)
+    }
+    withSourcesJar()
+}
+
+minecraft {
+    mappings channel: mappings_channel, version: mappings_version
+    copyIdeResources = true
+    runs {
+        client {
+            workingDirectory project.file('run')
+            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+            property 'forge.logging.console.level', 'debug'
+            mods {
+                spiritwings {
+                    source sourceSets.main
+                }
+            }
+        }
+        server {
+            workingDirectory project.file('run')
+            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+            property 'forge.logging.console.level', 'debug'
+            mods {
+                spiritwings {
+                    source sourceSets.main
+                }
+            }
+        }
+    }
+}
+
+repositories {
+    maven { url = 'https://maven.minecraftforge.net' }
+    maven { url = 'https://maven.blamejared.com' } // common, optional
+    maven { url = 'https://maven.geckolib.com' }    // GeckoLib
+    mavenCentral()
+}
+
+dependencies {
+    minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+    // GeckoLib for animated models; marked as compileOnly so we can run without it,
+    // but the visuals will engage when it is present (Respillaged uses GeckoLib).
+    compileOnly "software.bernie.geckolib:geckolib-forge-1.20.1:${geckolib_version}"
+    runtimeOnly "software.bernie.geckolib:geckolib-forge-1.20.1:${geckolib_version}"
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+    options.release.set(java_version as int)
+}
+
+tasks.withType(ProcessResources).configureEach {
+    var replaceProperties = [
+        'modid': project.modid,
+        'mod_version': project.mod_version,
+        'minecraft_version': project.minecraft_version
+    ]
+    inputs.properties replaceProperties
+    filesMatching('META-INF/mods.toml') {
+        expand replaceProperties
+    }
+}

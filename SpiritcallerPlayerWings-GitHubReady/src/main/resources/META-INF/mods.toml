@@ -1,0 +1,33 @@
+
+modLoader="javafml"
+loaderVersion="[47,)"
+
+license="All Rights Reserved (this project); depends-on assets owned by their authors"
+issueTrackerURL=""
+showAsResourcePack=false
+
+[[mods]]
+modId="${modid}"
+version="${mod_version}"
+displayName="Spiritcaller Player Wings"
+displayURL=""
+credits=""
+authors="Matthew + Marvin"
+description='''
+Server-authoritative player cosmetic that renders the Illage & Spillage: Respillaged Spiritcaller wings/halo/circles on players.
+Requires clients to have this mod installed. This mod DOES NOT bundle any Respillaged assets.
+'''
+
+[[dependencies.${modid}]]
+modId="forge"
+mandatory=true
+versionRange="[47.0.0,)"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.${modid}]]
+modId="minecraft"
+mandatory=true
+versionRange="[1.20.1,1.21)"
+ordering="NONE"
+side="BOTH"
